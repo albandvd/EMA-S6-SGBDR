@@ -23,7 +23,11 @@ INSERT INTO site (id_site, nom_site, url_site, status) VALUES (4, 'aaaa', 'https
 
 -- Création du nouvel utilisateur
 
--- Gestion des droits de l'utilisateur
+-- Gestion des droits de l'utilisateur (à réaliser sur C##DAVID)
+GRANT SELECT, UPDATE ON SITE TO C##ALBAN
+
 ```
+
+
 
 
