@@ -68,24 +68,57 @@ INSERT INTO notes (resultat, id_Eleve, id_Matiere) VALUES (16, 2, 3);
 
 ## Question 4
 
-Créer des requêtes SQL permettant de retourner :
-• La moyenne de la classe
-• La moyenne d’un élève (à partir de ses nom et prénom)
-• La moyenne des notes dans une matière (à partir du nom du professeur)
-• La moyenne de chacun des élèves (une seule requête)
-• La moyenne de chacune des matières (une seule requête)
-• La moyenne d’un élève entre 2 dates
-
+Créer des requêtes SQL permettant de retourner \:\
+La moyenne de la classe
 ```sql
 -- moyenne de la classe
+SELECT AVG(resultat) AS moyenne_classe
+FROM notes;
+```
 
+La moyenne d’un élève (à partir de ses nom et prénom)
+```sql
 -- moyenne d’un élève
+SELECT AVG(n.resultat) AS moyenne_eleve
+FROM notes n
+JOIN eleve e ON n.id_Eleve = e.id_Eleve
+WHERE e.nom = 'David' AND e.prenom = 'Alban';
+```
 
+La moyenne des notes dans une matière (à partir du nom du professeur)
+```sql
 -- moyenne des notes dans une matière
+SELECT AVG(n.resultat) AS moyenne_matiere
+FROM notes n
+JOIN matiere m ON n.id_Matiere = m.id_Matiere
+WHERE m.prof = 'Bayard';
+```
 
+La moyenne de chacun des élèves (une seule requête)
+```sql
 -- moyenne de chacun des élèves
+SELECT e.prenom, e.nom, AVG(n.resultat) AS moyenne
+FROM notes n
+JOIN eleve e ON n.id_Eleve = e.id_Eleve
+GROUP BY e.id_Eleve, e.prenom, e.nom;
+```
 
+La moyenne de chacune des matières (une seule requête)
+```sql
 -- moyenne de chacune des matières
+SELECT e.prenom, e.nom, AVG(n.resultat) AS moyenne
+FROM notes n
+JOIN eleve e ON n.id_Eleve = e.id_Eleve
+GROUP BY e.id_Eleve, e.prenom, e.nom;
+```
 
+La moyenne d’un élève entre 2 dates
+```sql
 -- moyenne d’un élève entre 2 dates
+SELECT AVG(n.resultat) AS moyenne
+FROM notes n
+JOIN eleve e ON n.id_Eleve = e.id_Eleve
+JOIN matiere m ON n.id_Matiere = m.id_Matiere
+WHERE e.nom = 'David' AND e.prenom = 'Alban'
+  AND m.date_Exam BETWEEN TO_DATE('01-04-2002', 'DD-MM-YYYY') AND TO_DATE('30-04-2002', 'DD-MM-YYYY');
 ```
