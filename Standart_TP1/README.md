@@ -47,7 +47,7 @@ CREATE TABLE ingredient (
 );
 
 CREATE TABLE recette (
-    quantité NUMBER(10,0),
+    quantité NUMBER(10,2),
     prenom VARCHAR(20),
     nom VARCHAR(20),
     id_Plat NUMBER(10,0),
@@ -99,6 +99,10 @@ COMMIT;
 
 ## Question 5
 
+Créer des requêtes permettant de retrouver les informations de la base. Notamment :
+
+### A/ étant donné les nom et prénom d'un chef, ainsi que la désignation d'un plat, en afficher la recette, c'est-à-dire les caractéristiques des ingrédients (pas leur numéro !) ainsi que leur quantité dans la recette.
+
 ```sql
 -- Exemple pour Raymond Livius et le plat "calamars à l’américaine"
 SELECT 
@@ -120,4 +124,48 @@ WHERE
     AND r.prenom = 'Raymond'
     AND p.designation = 'calamars à l’américaine';
 
+```
+
+### B/ Le chef Raymond Livius veut préparer 15 plats de « calamars à l’américaine », établir la liste des ingrédients nécessaires ainsi que la quantité totale à approvisionner la veille pour pouvoir assurer le service de ces 15 couverts ?
+
+
+```sql
+SELECT 
+    i.nom AS nom_ingredient,
+    i.qualification,
+    i.unité,
+    c.libelle AS categorie,
+    r.quantité * 15 AS quantite_totale
+FROM 
+    recette r
+JOIN 
+    ingredient i ON r.id_Ingredient = i.id_Ingredient
+JOIN 
+    categorie c ON i.id_Categorie = c.id_Categorie
+JOIN 
+    plat p ON r.id_Plat = p.id_Plat
+WHERE 
+    r.nom = 'Livius'
+    AND r.prenom = 'Raymond'
+    AND p.designation = 'calamars à l’américaine';
+```
+
+### C/ Même question mais en affichant les quantités pour tous les chefs ...
+
+``` sql
+SELECT
+    r.prenom,
+    r.nom,
+    p.designation,
+    i.nom AS ingredient,
+    i.qualification,
+    i.unité,
+    r.quantité * 15 / p.nb_pers AS quantité_totale
+FROM recette r
+JOIN
+    ingredient i ON r.id_Ingredient = i.id_Ingredient
+JOIN
+    plat p ON r.id_Plat = p.id_Plat
+WHERE
+    p.designation = 'calamars à l’américaine';
 ```
